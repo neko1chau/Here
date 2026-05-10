@@ -1,0 +1,50 @@
+import CoreLocation
+import MapKit
+import SwiftUI
+
+struct AddTimezone: View {
+    @Environment(\.database) var database
+    @StateObject private var searchCompleter = SearchCompleter()
+
+    @EnvironmentObject var router: Router
+
+    @State var image: NSImage?
+    @State var name = ""
+    @State var city = ""
+    @State var selectedTimeZone: TimeZone? = nil
+    @State var isShowingPopover = false
+    @State var countryEmoji = ""
+
+    @State var showingLocalUpload = false
+
+    var body: some View {
+        VStack(alignment: .center, spacing: 0) {
+            IconSection(
+                image: $image,
+                countryEmoji: $countryEmoji,
+                showingLocalUpload: $showingLocalUpload
+            )
+
+            FormSection(
+                name: $name,
+                city: $city,
+                selectedTimeZone: $selectedTimeZone,
+                isShowingPopover: $isShowingPopover,
+                searchCompleter: searchCompleter,
+                countryEmoji: $countryEmoji,
+                saveEntry: saveEntry
+            )
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+        .overlay(alignment: .topLeading) {
+            Titlebar()
+                .padding(6)
+        }
+    }
+}
+
+#Preview {
+    AddTimezone()
+        .frame(width: 300, height: 400)
+}
